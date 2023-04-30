@@ -15,7 +15,7 @@ import {
   
   const pages = import.meta.glob("./pages/**/*.tsx", { eager: true });
   
-  const routes: IRoute[] = [];
+ export const routes: IRoute[] = [];
   for (const path of Object.keys(pages)) {
     const fileName = path.match(/\.\/pages\/(.*)\.tsx$/)?.[1];
     if (!fileName) {

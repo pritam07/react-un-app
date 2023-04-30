@@ -15,13 +15,14 @@
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.12.2",
     "@mui/styled-engine-sc": "^5.12.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "@types/d3": "^7.4.0",
+    "d3": "^7.8.4",
+    "react": "^0.0.0-experimental-18282f881-20230428",
+    "react-dom": "^0.0.0-experimental-18282f881-20230428",
     "react-router-dom": "^6.10.0",
     "styled-components": "^5.3.10"
   },
   "devDependencies": {
-    "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",

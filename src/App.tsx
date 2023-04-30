@@ -1,17 +1,16 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Suspense, use } from 'react';
 import './App.css';
-import Main from './core/Main'
 import { router } from './Routes';
 import { RouterProvider } from 'react-router-dom';
+import Page from './core/Page';
+import { PopulationContext } from './contexts/PopulationContext';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <Main />
+    <Suspense fallback={<div>Loading</div>}>
+        <Page />
+     </Suspense>
     </>
   )
 }

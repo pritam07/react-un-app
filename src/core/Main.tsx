@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -18,9 +18,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import { RouterProvider } from 'react-router-dom';
-import { router } from '../Routes';
 import { routes } from '../config/route';
+import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -50,6 +49,7 @@ interface AppBarProps extends MuiAppBarProps {
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<AppBarProps>(({ theme, open }) => ({
+  backgroundColor: '#ff2500',
   transition: theme.transitions.create(['margin', 'width'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -73,9 +73,11 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-export default function Main({ history }) {
+export default function Main() {
+  const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -84,6 +86,12 @@ export default function Main({ history }) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const pageChange = (event: React.MouseEvent<HTMLElement>, data: any) => {
+    event.preventDefault();
+    console.log(data);
+    navigate(data.link)
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -126,7 +134,7 @@ export default function Main({ history }) {
         <List>
           {routes.map((data, index) => (
             <ListItem key={index} disablePadding>
-              <ListItemButton onClick={() => history.push(data.link)}>
+              <ListItemButton onClick={(event: React.MouseEvent<HTMLElement>) => pageChange(event,data)}>
                 <ListItemIcon>
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                 </ListItemIcon>
@@ -139,7 +147,7 @@ export default function Main({ history }) {
       </Drawer>
       <Body open={open}>
         <DrawerHeader />
-        <RouterProvider router={router} />
+        
       </Body>
     </Box>
   );
