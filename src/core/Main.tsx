@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { use } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -18,8 +18,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import { routes } from '../config/route';
 import { useNavigate } from 'react-router-dom';
+import { MenuModel } from '../models/Menu';
+import { MenuContext } from '../contexts/Contexts';
 
 const drawerWidth = 240;
 
@@ -68,7 +69,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
   justifyContent: 'flex-end',
 }));
@@ -77,8 +77,7 @@ export default function Main() {
   const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-
-
+  let routes: MenuModel[] = use(MenuContext);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -89,8 +88,9 @@ export default function Main() {
 
   const pageChange = (event: React.MouseEvent<HTMLElement>, data: any) => {
     event.preventDefault();
-    console.log(data);
-    navigate(data.link)
+    if (data) {
+      navigate('/', { state: data })
+    }
   }
 
   return (
@@ -138,7 +138,7 @@ export default function Main() {
                 <ListItemIcon>
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                 </ListItemIcon>
-                <ListItemText primary={data.linkText} />
+                <ListItemText primary={data.label} />
               </ListItemButton>
             </ListItem>
           ))}

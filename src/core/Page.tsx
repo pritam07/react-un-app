@@ -1,26 +1,39 @@
-import { use, useMemo } from 'react';
+import { use } from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { router } from '../Routes';
-import { PopulationContext } from '../contexts/PopulationContext';
+import { AboutContext, MenuContext, PopulationContext } from '../contexts/Contexts';
+import { config } from '../config';
 
-const url: string = 'https://datausa.io/api/data?drilldowns=Nation&measures=Population';
-
-async function fetchPopulation(url: string) {
-    const data = await fetch(url);
-    return data.json();
-}
+const cachedFetches: any = {};
+const cachedFetch = (url: string) => {
+  if (!cachedFetches[url]) {
+    cachedFetches[url] = fetch(url).then(async (res) => (await res.json()));
+  }
+  return cachedFetches[url];
+};
 
 const Page = () => {
-  const promise = useMemo(() => fetchPopulation(url), [url]);
-  let response = use(promise);
-  if (response.data) {
-        response = response.data.map((val: any) => { return {year: parseInt(val.Year), population: val.Population} });
+  const menuResponse = use(cachedFetch(`${config.api.menu}?locale=en`));
+  const aboutResponse = use(cachedFetch(config.api.about));
+  let populationResponse: any = use(cachedFetch(config.api.population));
+  if (populationResponse.data) {
+    populationResponse = populationResponse.data.map((val: any) => { return {year: parseInt(val.Year), population: val.Population} });
    }
   return (
   <>
-  {response && <PopulationContext.Provider value={response}>
-     <RouterProvider router={router} />
-  </PopulationContext.Provider>  }
+  { populationResponse && 
+  <PopulationContext.Provider value={populationResponse}>
+    { menuResponse && 
+    <MenuContext.Provider value={menuResponse}>
+        {aboutResponse &&  
+            <AboutContext.Provider value ={aboutResponse}>
+                <RouterProvider router={router} />
+            </AboutContext.Provider>
+        }
+        </MenuContext.Provider> 
+     }
+   </PopulationContext.Provider>  
+   }
   </>)
 };
 

@@ -1,8 +1,9 @@
-import { useD3 } from './hooks/useD3';
-import React from 'react';
+import { useD3 } from './hooks/useD3';;
 import * as d3 from 'd3';
+import { useLocation } from 'react-router-dom';
 
 function BarChart(props: any) {
+  const { state } = useLocation();
   const ref = useD3(
     (svg: any) => {
       const height = 400;
@@ -55,7 +56,7 @@ function BarChart(props: any) {
 
       svg
         .select(".plot-area")
-        .attr("fill", "#ff2500")
+        .attr("fill", state.param.fill)
         .selectAll(".bar")
         .data(props.data)
         .join("rect")

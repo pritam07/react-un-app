@@ -1,16 +1,16 @@
-import { Suspense, use } from 'react';
+import { Suspense } from 'react';
 import './App.css';
-import { router } from './Routes';
-import { RouterProvider } from 'react-router-dom';
 import Page from './core/Page';
-import { PopulationContext } from './contexts/PopulationContext';
+import ErrorBoundary from './ErrorBoundary';
 
 function App() {
   return (
     <>
-    <Suspense fallback={<div>Loading</div>}>
-        <Page />
-     </Suspense>
+    <ErrorBoundary fallback={<div>There is Some Error Happen</div>}>
+      <Suspense fallback={<div>Loading</div>}>
+          <Page />
+      </Suspense>
+     </ErrorBoundary>
     </>
   )
 }
